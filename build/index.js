@@ -41,6 +41,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
+ * Internal dependencies
+ */
+// import Edit from './edit';
+// import save from './save';
+// import metadata from './block.json';
+
+/**
  * Every block starts by registering a new block type definition.
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
@@ -58,6 +65,14 @@ __webpack_require__.r(__webpack_exports__);
       type: 'boolean',
       default: true
     },
+    thumbnailSize: {
+      type: 'string',
+      default: 'medium'
+    },
+    displayPostExcerpt: {
+      type: 'boolean',
+      default: false
+    },
     postCategory: {
       type: 'number',
       default: 0
@@ -70,6 +85,8 @@ __webpack_require__.r(__webpack_exports__);
     const {
       numberOfPosts,
       displayPostThumbnail,
+      thumbnailSize,
+      displayPostExcerpt,
       postCategory
     } = attributes;
     const categories = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_4__.useSelect)(select => select('core').getEntityRecords('taxonomy', 'category', {
@@ -93,6 +110,28 @@ __webpack_require__.r(__webpack_exports__);
         displayPostThumbnail: value
       })
     }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.SelectControl, {
+      label: "Thumbnail size",
+      value: thumbnailSize,
+      options: [{
+        label: 'Thumbnail',
+        value: 'thumbnail'
+      }, {
+        label: 'Medium',
+        value: 'medium'
+      }, {
+        label: 'Large',
+        value: 'large'
+      }],
+      onChange: value => setAttributes({
+        thumbnailSize: value
+      })
+    }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.ToggleControl, {
+      label: "Display post excerpt",
+      checked: displayPostExcerpt,
+      onChange: value => setAttributes({
+        displayPostExcerpt: value
+      })
+    }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.SelectControl, {
       label: "Post Category",
       value: postCategory,
       options: [{
@@ -107,7 +146,7 @@ __webpack_require__.r(__webpack_exports__);
       })
     }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)()
-    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Displaying ", numberOfPosts, " posts ", displayPostThumbnail ? 'with' : 'without', " thumbnails.")));
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Displaying ", numberOfPosts, " ", numberOfPosts === 1 ? 'post' : 'posts', " from the ", postCategory?.name || 'All Categories', " ", displayPostThumbnail ? 'with' : 'without', " thumbnails.")));
   },
   save: () => null
 });

@@ -18,6 +18,13 @@ import { useSelect } from '@wordpress/data';
 import './style.scss';
 
 /**
+ * Internal dependencies
+ */
+// import Edit from './edit';
+// import save from './save';
+// import metadata from './block.json';
+
+/**
  * Every block starts by registering a new block type definition.
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
@@ -35,13 +42,21 @@ registerBlockType('create-block/aw-blog-posts-block', {
 			type: 'boolean',
 			default: true,
 		},
+		thumbnailSize: {
+			type: 'string',
+			default: 'medium',
+		},
+		displayPostExcerpt: {
+			type: 'boolean',
+			default: false,
+		},
 		postCategory: {
 			type: 'number',
 			default: 0,
 		},
 	},
 	edit: ({ attributes, setAttributes }) => {
-		const { numberOfPosts, displayPostThumbnail, postCategory } = attributes;
+		const { numberOfPosts, displayPostThumbnail, thumbnailSize, displayPostExcerpt, postCategory } = attributes;
 
 		const categories = useSelect((select) =>
 			select('core').getEntityRecords('taxonomy', 'category', { per_page: -1 })
@@ -64,6 +79,21 @@ registerBlockType('create-block/aw-blog-posts-block', {
 							onChange={(value) => setAttributes({ displayPostThumbnail: value })}
 						/>
 						<SelectControl
+							label="Thumbnail size"
+							value={thumbnailSize}
+							options={[
+								{ label: 'Thumbnail', value: 'thumbnail' },
+								{ label: 'Medium', value: 'medium' },
+								{ label: 'Large', value: 'large' },
+							]}
+							onChange={(value) => setAttributes({ thumbnailSize: value })}
+						/>
+						<ToggleControl
+							label="Display post excerpt"
+							checked={displayPostExcerpt}
+							onChange={(value) => setAttributes({ displayPostExcerpt: value })}
+						/>
+						<SelectControl
 							label="Post Category"
 							value={postCategory}
 							options={[{ label: 'All Categories', value: '' }].concat(
@@ -77,7 +107,7 @@ registerBlockType('create-block/aw-blog-posts-block', {
 					</PanelBody>
 				</InspectorControls>
 				<div {...useBlockProps()}>
-					<p>Displaying {numberOfPosts} posts {displayPostThumbnail ? 'with' : 'without'} thumbnails.</p>
+					<p>Displaying {numberOfPosts} {numberOfPosts === 1 ? 'post' : 'posts'} from the {postCategory?.name || 'All Categories'} {displayPostThumbnail ? 'with' : 'without'} thumbnails.</p>
 				</div>
 			</>
 		);

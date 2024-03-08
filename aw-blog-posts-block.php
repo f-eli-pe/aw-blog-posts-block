@@ -52,12 +52,14 @@ function aw_blog_posts_block_render($attributes)
 	if ($query->have_posts()) {
 		while ($query->have_posts()) {
 			$query->the_post();
-			$thumbnail = $attributes['displayPostThumbnail'] && has_post_thumbnail();
+			$thumbnail = $attributes['displayPostThumbnail'] && has_post_thumbnail() ? get_the_post_thumbnail(null, $attributes['thumbnailSize']) : '';
+			$excerpt = $attributes['displayPostExcerpt'] ? '<div class="post-excerpt">' . get_the_excerpt() . '</div>' : '';
 			$posts .= sprintf(
 				'<li>%s<div class="post-content"><a href="%s">%s</a>%s</div></li>',
 				$thumbnail,
 				get_permalink(),
 				get_the_title(),
+				$excerpt
 			);
 		}
 		wp_reset_postdata();
