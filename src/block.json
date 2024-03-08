@@ -5,7 +5,7 @@
 	"version": "0.1.0",
 	"title": "Aw Blog Posts Block",
 	"category": "widgets",
-	"icon": "smiley",
+	"icon": "list-view",
 	"description": "Display blog posts with options. Scaffolded with Create Block tool.",
 	"example": {},
 	"supports": {
@@ -14,6 +14,5 @@
 	"textdomain": "aw-blog-posts-block",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
-	"style": "file:./style-index.css",
-	"viewScript": "file:./view.js"
+	"style": "file:./style-index.css"
 }
