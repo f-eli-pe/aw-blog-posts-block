@@ -46,24 +46,37 @@ function aw_blog_posts_block_render($attributes)
 		$args['cat'] = $attributes['postCategory'];
 	}
 
+	$displayPostThumbnail = $attributes['displayPostThumbnail'] ?? true;
+
 	$query = new WP_Query($args);
 	$posts = '';
 
 	if ($query->have_posts()) {
 		while ($query->have_posts()) {
 			$query->the_post();
-			$thumbnail = $attributes['displayPostThumbnail'] && has_post_thumbnail() ? get_the_post_thumbnail(null, $attributes['thumbnailSize']) : '';
-			$excerpt = $attributes['displayPostExcerpt'] ? '<div class="post-excerpt">' . get_the_excerpt() . '</div>' : '';
+			$thumbnail = '';
+
+			if ($displayPostThumbnail) {
+				if (has_post_thumbnail()) {
+					$thumbnail = get_the_post_thumbnail(null, $attributes['thumbnailSize'], array('style' => 'float: left; margin-right: 20px;'));
+				} else {
+					$thumbnail = '<div style="width: 150px; height: 150px; background-color: gray; float: left; margin-right: 20px;"></div>';
+				}
+			}
+
+			$title = sprintf('<h4><a href="%s">%s</a></h4>', get_permalink(), get_the_title());
+			$excerpt = $attributes['displayPostExcerpt'] ? '<p>' . get_the_excerpt() . '</p>' : '';
+
 			$posts .= sprintf(
-				'<li>%s<div class="post-content"><a href="%s">%s</a>%s</div></li>',
+				'<div style="overflow: hidden; margin-bottom: 20px;">%s<div class="post-content">%s%s</div></div>',
+
 				$thumbnail,
-				get_permalink(),
-				get_the_title(),
+				$title,
 				$excerpt
 			);
 		}
 		wp_reset_postdata();
 	}
 
-	return sprintf('<ul class="aw-blog-posts-block">%s</ul>', $posts);
+	return sprintf('<div class="aw-blog-posts-block">%s</div>', $posts);
 }
