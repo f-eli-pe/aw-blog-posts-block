@@ -62,6 +62,8 @@ registerBlockType('create-block/aw-blog-posts-block', {
 			select('core').getEntityRecords('taxonomy', 'category', { per_page: -1 })
 			, []);
 
+		const selectedCategory = categories?.find(category => category.id === postCategory);
+
 		return (
 			<>
 				<InspectorControls>
@@ -107,7 +109,7 @@ registerBlockType('create-block/aw-blog-posts-block', {
 					</PanelBody>
 				</InspectorControls>
 				<div {...useBlockProps()}>
-					<p>Displaying {numberOfPosts} {numberOfPosts === 1 ? 'post' : 'posts'} from the {postCategory?.name || 'All Categories'} {displayPostThumbnail ? 'with' : 'without'} thumbnails.</p>
+					<p>Displaying {numberOfPosts} {numberOfPosts === 1 ? 'post' : 'posts'} from {selectedCategory ? selectedCategory.name : 'All Categories'} {displayPostThumbnail ? 'with' : 'without'} thumbnails.</p>
 				</div>
 			</>
 		);
